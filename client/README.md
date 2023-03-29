@@ -3,7 +3,7 @@
 #flutter create .
 Remove test dir.
 #flutter run -d <android device id>
-Approve install on device.
+Approve install on android device.
 
 Initially it will fail with error.
 E/flutter (16279): [ERROR:flutter/runtime/dart_vm_initializer.cc(41)] Unhandled Exception: gRPC Error (code: 14, codeName: UNAVAILABLE, message: Error connecting: SocketException: Connection refused (OS Error: Connection refused, errno = 111), address = localhost, port = 40262, details: null, rawResponse: null, trailers: {})
@@ -19,3 +19,6 @@ await Future.delayed(Duration(seconds: 1));
 
 #adb reverse tcp:8081 tcp:8081
 #flutter run -d <select physical device id>
+
+
+NOTE: To run on macos, you need to enable outgoing network on macos project settings to enable access to server.
