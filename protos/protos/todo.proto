@@ -8,6 +8,7 @@ message Todo {
 
 service TodoService {
     rpc getTodo(GetTodoByIdRequest) returns (Todo);
+    rpc getTodoStream(GetTodoByIdRequest) returns ( stream Todo);
 }
 
 message GetTodoByIdRequest {

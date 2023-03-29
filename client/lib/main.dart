@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:protobuf/protobuf.dart';
 import 'package:protos/protos.dart';
@@ -35,19 +37,29 @@ class _MyHomePageState extends State<MyHomePage> {
   late TodoServiceClient _stub;
 
   Todo? todo;
+  Stream<Todo>? _todoStream;
 
   @override
   void initState() {
     super.initState();
 
     _channel = ClientChannel('localhost',
-        port: 8080,
+        port: 8081,
         options:
             const ChannelOptions(credentials: ChannelCredentials.insecure()));
     _stub = TodoServiceClient(_channel);
+    _todoStream = _stub.getTodoStream(GetTodoByIdRequest(id: 1));
   }
 
-  void _getTodo() {}
+  Future<void> _getTodo() async {
+    final id = Random().nextInt(100);
+
+    final todo = await _stub.getTodo(GetTodoByIdRequest(id: id));
+
+    setState(() {
+      this.todo = todo;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +71,23 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            StreamBuilder(
+                stream: _todoStream,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    final todo = snapshot.data as Todo;
+                    return Column(
+                      children: [
+                        Text(todo.id.toString()),
+                        Text(todo.title),
+                        Text(todo.completed.toString()),
+                      ],
+                    );
+                  }
+                  return const Text('Loading');
+                }),
+            /*
+            This is when we don't use StreamBuilder.
             if (todo != null)
               Column(
                 children: [
@@ -68,7 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               )
             else
-              Text('GET your TODo'),
+              Text('GET your things done'),
+              */
           ],
         ),
       ),
