@@ -4,7 +4,7 @@
     Run the following command.
 
     #protoc --dart_out=grpc:lib/src/generated -Iprotos protos/*
-2. Run the server using, same server is implemented in https://github.com/satyajitg2/grpc-java/src/main/java/com/sat/protobuf/TodoService.java
+2. Run the server using (or grpc-java server in https://github.com/satyajitg2/grpc-java, exact same proto/interface)
    
     #dart bin/server.dart
 
